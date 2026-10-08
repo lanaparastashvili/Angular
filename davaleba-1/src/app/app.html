@@ -1,0 +1,211 @@
+<div class="app-layout">
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="brand-section">
+        <div class="brand-logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">Inventory Manager</h1>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-add-product" (click)="openAddModal()" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>ახალი პროდუქტი</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- Stats Dashboard Bar -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-bg bg-indigo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{{ products.length }}</div>
+          <div class="stat-label">სულ პროდუქტი (Total Items)</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-bg bg-emerald">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">\${{ totalInventoryValue.toFixed(2) }}</div>
+          <div class="stat-label">ინვენტარის ღირებულება (Total Value)</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-bg bg-amber">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">\${{ averagePrice.toFixed(2) }}</div>
+          <div class="stat-label">საშუალო ფასი (Average Price)</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-bg bg-purple">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{{ categories.length }}</div>
+          <div class="stat-label">ძირითადი კატეგორიები</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toolbar: Search & Filter -->
+    <section class="toolbar-card">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="ძებნა დასახელებით, SKU კოდით ან კატეგორიით..."
+          [(ngModel)]="searchTerm"
+        />
+        <button *ngIf="searchTerm" class="clear-search-btn" (click)="searchTerm = ''" type="button">&times;</button>
+      </div>
+
+      <div class="filters-group">
+        <div class="filter-control">
+          <label>კატეგორია:</label>
+          <select class="form-select" [(ngModel)]="selectedCategory">
+            <option value="ALL">ყველა კატეგორია</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+
+        <div class="filter-control">
+          <label>სორტირება:</label>
+          <select class="form-select" [(ngModel)]="sortBy">
+            <option value="DEFAULT">ნაგულისხმევი</option>
+            <option value="PRICE_LOW">ფასი: დაბლიდან მაღლა</option>
+            <option value="PRICE_HIGH">ფასი: მაღლიდან დაბლა</option>
+            <option value="NAME_ASC">სახელი (A-Z)</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Layout (Products List + Selection Preview Panel) -->
+    <div class="inventory-grid-layout">
+      <!-- Left Column: Products List Component -->
+      <div class="list-column">
+        <div class="column-header">
+          <h3>პროდუქტების სია (ProductsList)</h3>
+          <span class="count-badge">{{ filteredProducts.length }} / {{ products.length }}</span>
+        </div>
+
+        <products-list
+          [productList]="filteredProducts"
+          [selectedProduct]="selectedProduct"
+          (onProductSelected)="productWasSelected($event)"
+        >
+        </products-list>
+      </div>
+
+      <!-- Right Column: Active Selection Preview Drawer (Desktop View) -->
+      <div class="preview-column">
+        <div class="column-header">
+          <h3>არჩეული პროდუქტი (Selected Product)</h3>
+        </div>
+
+        <div *ngIf="selectedProduct; else noSelection" class="selection-preview-card">
+          <div class="preview-image-wrapper">
+            <product-image [product]="selectedProduct"></product-image>
+          </div>
+
+          <div class="preview-details">
+            <span class="preview-sku">{{ selectedProduct.sku }}</span>
+            <h4 class="preview-title">{{ selectedProduct.name }}</h4>
+
+            <div class="preview-section">
+              <label>Department:</label>
+              <product-department [product]="selectedProduct"></product-department>
+            </div>
+
+            <div class="preview-section price-section">
+              <label>Price:</label>
+              <price-display [price]="selectedProduct.price"></price-display>
+            </div>
+
+            <div class="preview-actions">
+              <button class="btn btn-outline" (click)="openEditModal(selectedProduct)" type="button">
+                რედაქტირება
+              </button>
+              <button class="btn btn-danger-sm" (click)="deleteProduct(selectedProduct)" type="button">
+                წაშლა
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noSelection>
+          <div class="no-selection-card">
+            <div class="pointer-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"></path>
+              </svg>
+            </div>
+            <p>აირჩიეთ პროდუქტი სიიდან დეტალების სანახავად</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modals -->
+  <product-detail-modal
+    *ngIf="showDetailModal"
+    [product]="selectedProduct"
+    (onClose)="closeDetailModal()"
+    (onEditProduct)="openEditModal($event)"
+    (onDeleteProduct)="deleteProduct($event)"
+  >
+  </product-detail-modal>
+
+  <product-form-modal
+    *ngIf="showFormModal"
+    [editProduct]="editingProduct"
+    (onClose)="closeFormModal()"
+    (onSaveProduct)="saveProduct($event)"
+  >
+  </product-form-modal>
+</div>
