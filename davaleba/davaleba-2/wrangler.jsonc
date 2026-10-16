@@ -2,7 +2,7 @@
   "name": "davaleba-2",
   "compatibility_date": "2025-01-01",
   "assets": {
-    "directory": "./dist/davaleba-2/browser",
+    "directory": "./dist/ecommerce-cart/browser",
     "not_found_handling": "single-page-application"
   }
 }
