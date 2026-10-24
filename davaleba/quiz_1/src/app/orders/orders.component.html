@@ -1,0 +1,48 @@
+<div class="orders-container">
+  <h2>Orders</h2>
+
+  <!-- *ngIf დირექტივის გამოყენება (1 ქულა) -->
+  <div *ngIf="orders && orders.length > 0; else noData">
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>TEAM MEMBER</th>
+          <th>LOADING</th>
+          <th>BILLABLE</th>
+          <th>EFFICIENCY %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- *ngFor დირექტივის გამოყენება (1 ქულა) -->
+        <tr *ngFor="let order of orders">
+          <td class="member-name">{{ order.teamMember }}</td>
+          <td>
+            <span class="status-indicator">
+              <!-- High - წითელი (2 ქულა) -->
+              <span *ngIf="order.loading === 'High'" class="dot red"></span>
+
+              <!-- Medium - ყვითელი (2 ქულა) -->
+              <span *ngIf="order.loading === 'Medium'" class="dot yellow"></span>
+
+              <!-- Low - მწვანე (2 ქულა) -->
+              <span *ngIf="order.loading === 'Low'" class="dot green"></span>
+
+              <span>{{ order.loading }}</span>
+            </span>
+          </td>
+          <td>{{ order.billable }}</td>
+          <td>{{ order.efficiency }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- შეკვეთების საერთო რაოდენობა ცხრილის ბოლოს (2 ქულა) -->
+    <div class="table-footer">
+      <p>Showing {{ orders.length }} items out of {{ orders.length }} results found</p>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <p>შეკვეთები ვერ მოიძებნა.</p>
+  </ng-template>
+</div>
